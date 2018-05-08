@@ -1,13 +1,12 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const session = require('cookie-session')
-
 const { log } = require('./utils')
 const { secretKey } = require('./config')
 
 // 引入路由文件
 // const todo = require('./routes/todo')
-// const index = require('./routes/index')
+const index = require('./routes/index')
 
 // 先初始化一个 express 实例
 const app = express()
@@ -23,7 +22,9 @@ app.use(session({
 
 // 配置静态资源文件, 比如 js css 图片
 const asset = __dirname + '/dist'
-app.use('/static', express.static(asset))
+
+// app.use('/dist', express.static(asset))
+app.use(express.static('dist'));
 
 // 使用 app.use(path, route) 的方式注册路由程序
 // path 是访问路由的前缀(注意, 这里并不是完整的路由, 只是一个路由的前缀),
