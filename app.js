@@ -5,9 +5,9 @@ const { log } = require('./utils')
 const { secretKey } = require('./config')
 
 // 引入路由文件
-// const todo = require('./routes/todo')
 const user = require('./routes/user')
-
+// 引入公共部分路由
+const index = require('./routes/index')
 // 先初始化一个 express 实例
 const app = express()
 
@@ -25,8 +25,10 @@ app.use(bodyParser.urlencoded({
 	extended: true,
 }))
 // 设置 session, 这里的 secretKey 是从 config.js 文件中拿到的
+// app.use(session({ secret: secretKey, key: 'jack_key',cookie: {maxAge:  60 * 10000 * 30 }}));
 app.use(session({
 	secret: secretKey,
+	cookie: {maxAge:  60 * 10000 * 30 },
 }))
 
 // 配置静态资源文件, 比如 js css 图片
@@ -40,21 +42,22 @@ app.use(express.static('dist'));
 // 比如 foo 里有一个 app.get('/foo', () => {})
 // 那么 foo.get('/bar') 匹配的路由就是 /foo/bar
 app.use('/user', user)
-// app.use('/todo', todo)
+app.use('/', index)
 
-// handle 404
-app.use(function(req, res) {
-    res.status(404);
-    url = req.url;
-    res.render('404.jade', {title: '404: File Not Found', url: url });
-});
+// // handle 404
+// app.use(function(req, res) {
+//     res.status(404);
+//     url = req.url;
+//     res.render('404.jade', {title: '404: File Not Found', url: url });
+// });
+//
+// // Handle 500
+// app.use(function(error, req, res, next) {
+//     res.status(500);
+//     url = req.url;
+//     res.render('500.jade', {title:'500: Internal Server Error', error: error, url: url});
+// });
 
-// Handle 500
-app.use(function(error, req, res, next) {
-    res.status(500);
-    url = req.url;
-    res.render('500.jade', {title:'500: Internal Server Error', error: error, url: url});
-});
 // 把逻辑放在单独的函数中, 这样可以方便地调用
 // 指定了默认的 host 和 port, 因为用的是默认参数, 当然可以在调用的时候传其他的值
 const run = (port=3000, host='') => {

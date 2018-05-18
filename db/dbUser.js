@@ -1,5 +1,5 @@
-const {Sequelize,sequelize } = require('./main')
-var User = sequelize.define('user', {
+const {Sequelize,sequelize } = require('./dbMain')
+var User = sequelize.define('users', {
     username: Sequelize.STRING(100),
     password: Sequelize.STRING(100),
     phone: Sequelize.BIGINT(100),

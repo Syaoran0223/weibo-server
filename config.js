@@ -1,5 +1,7 @@
 const secretKey = 'feng'
+const key = 'feng'
 
 module.exports = {
-	secretKey: secretKey,
+	secretKey,
+	key
 }

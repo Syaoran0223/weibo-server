@@ -1,7 +1,7 @@
 const crypto = require('crypto')
 
-const Model = require('./main')
-const { key } = require('../utils')
+const Model = require('./model')
+const { key } = require('../config')
 
 class Session extends Model {
     constructor(form={}) {
@@ -31,9 +31,9 @@ class Session extends Model {
 }
 
 const session = new Session()
-// const form = {
-//     uid: 1
-// }
+const form = {
+    uid: 1
+}
 // const s = session.encrypt(form)
 // console.log('debug s', s)
 // const s = '95e173235c02a4a0a9d935f36b82a2fb'
