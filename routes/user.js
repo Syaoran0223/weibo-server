@@ -3,6 +3,8 @@ const user = express.Router()
 const User = require('../model/user')
 const { log } = require('../utils.js')
 const { currentUser } = require('./main')
+const jwt = require('jwt-simple')
+const secret = 'fengTest'
 user.get('/', async(req, res) => {
 	let u = await User.currentUser(req)
 	log( '/ u', u)
@@ -25,16 +27,26 @@ user.post('/login', async(req, res)=> {
 	const u = await User.validateAuth(form)
 	if (u != false) {
 		req.session.uid = u.id
-		log('是否储存', req.session)
-		res.send(req.session)
+		let token = jwt.encode(u.id, secret)
+		res.setHeader('Jwt', token)
+		// res.header('Jrrwt', token)
+		res.setHeader("Access-Control-Expose-Headers", "Authorization, token")
+		log('token', token)
+		log('res', res.Jwt)
+		// res.writeHead({'Jwt': token});
+		let data = {'data': token}
+		res.send(data)
 	} else {
 		res.send('登录失败')
 	}
 })
 
 user.post('/isLogin', async(req, res) => {
-	log('测试 session', req.session)
-	let user = await User.currentUser(req)
+	// log('测试 session', req.session)
+	log('req', req.headers['jwt'])
+	let decoded = jwt.decode(req.headers['jwt'], secret)
+	log('decoded', decoded)
+	let user = await User.currentUser(decoded)
 	let form = req.body
 	log('测试 user', user)
 	res.send(user)

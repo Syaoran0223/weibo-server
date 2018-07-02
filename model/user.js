@@ -112,7 +112,7 @@ class User extends Model {
 	static async currentUser(request) {
 		// 通过 session 获取 uid, 如果没有的话就设置成空字符串
 		const fakeId = -1
-		const uid = request.session.uid || fakeId
+		const uid = request || fakeId
 		const u = await User.findByUid(uid)
 		if (u === null) {
 			// 如果当前没有用户登录, 造一个占位的用户
